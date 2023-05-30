@@ -1,16 +1,33 @@
 import "./App.css";
 import contacts from "./contacts.json";
-import { useState } from "react";
+import React, { useState } from "react";
 
 function App() {
-  const contactsCopy = [...contacts];
-  const contactsSelec = contactsCopy.slice(0, 5);
-  const [contactList, setContacts] = useState(contactsSelec);
-  console.log(contactList);
+  // //Create a list with 5 contact from data
+
+  const contactsArray = contacts.slice(0, 5);
+  const [contactCelebrities, setContactCelebrities] = useState(contactsArray);
+  // //Grab the remaining contacts from data
+  const [leftoverContacts, setLeftoverContacts] = useState(contacts.slice(6));
+
+  // add random contacts
+
+  const addContact = () => {
+    if (leftoverContacts.length === 0) {
+      return;
+    }
+    const newContactIndex = Math.floor(Math.random() * leftoverContacts.length);
+    const newContact = leftoverContacts[newContactIndex];
+    leftoverContacts.splice(newContactIndex, 1);
+    setLeftoverContacts(leftoverContacts);
+    const contactCelebritiesCopy = [...contactCelebrities, newContact];
+    setContactCelebrities(contactCelebritiesCopy);
+  };
 
   return (
     <div className="App">
       <h1>IronContacts</h1>
+      <button onClick={addContact}>Add Random Contact</button>
       <table>
         <thead>
           <tr>
@@ -22,7 +39,7 @@ function App() {
           </tr>
         </thead>
         <tbody>
-          {contactList.map((contact) => {
+          {contactCelebrities.map((contact) => {
             return (
               <tr key={contact.id}>
                 <td>
