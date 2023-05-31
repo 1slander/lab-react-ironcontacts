@@ -24,10 +24,28 @@ function App() {
     setContactCelebrities(contactCelebritiesCopy);
   };
 
+  const sortByName = () => {
+    const copyContacts = [...contactCelebrities];
+    const contactsByName = copyContacts.sort((a, b) =>
+      a.name > b.name ? 1 : -1
+    );
+    setContactCelebrities(contactsByName);
+  };
+
+  const sortByPopularity = () => {
+    const copyContacts = [...contactCelebrities];
+    const contactsByPopularity = copyContacts.sort(
+      (a, b) => b.popularity - a.popularity
+    );
+    setContactCelebrities(contactsByPopularity);
+  };
+
   return (
     <div className="App">
       <h1>IronContacts</h1>
       <button onClick={addContact}>Add Random Contact</button>
+      <button onClick={sortByName}>Sort by name</button>
+      <button onClick={sortByPopularity}>Sort by popularity</button>
       <table>
         <thead>
           <tr>
