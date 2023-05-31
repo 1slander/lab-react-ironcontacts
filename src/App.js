@@ -7,6 +7,8 @@ function App() {
 
   const contactsArray = contacts.slice(0, 5);
   const [contactCelebrities, setContactCelebrities] = useState(contactsArray);
+  //Copy of contacts
+  const copyContacts = [...contactCelebrities];
   // //Grab the remaining contacts from data
   const [leftoverContacts, setLeftoverContacts] = useState(contacts.slice(6));
 
@@ -22,10 +24,10 @@ function App() {
     setLeftoverContacts(leftoverContacts);
     const contactCelebritiesCopy = [...contactCelebrities, newContact];
     setContactCelebrities(contactCelebritiesCopy);
+    return;
   };
 
   const sortByName = () => {
-    const copyContacts = [...contactCelebrities];
     const contactsByName = copyContacts.sort((a, b) =>
       a.name > b.name ? 1 : -1
     );
@@ -33,19 +35,27 @@ function App() {
   };
 
   const sortByPopularity = () => {
-    const copyContacts = [...contactCelebrities];
     const contactsByPopularity = copyContacts.sort(
       (a, b) => b.popularity - a.popularity
     );
     setContactCelebrities(contactsByPopularity);
   };
 
+  const deleteContact = (contactId) => {
+    const filteredContacts = copyContacts.filter((contact) => {
+      return contact.id !== contactId;
+    });
+    setContactCelebrities(filteredContacts);
+  };
+
   return (
     <div className="App">
-      <h1>IronContacts</h1>
-      <button onClick={addContact}>Add Random Contact</button>
-      <button onClick={sortByName}>Sort by name</button>
-      <button onClick={sortByPopularity}>Sort by popularity</button>
+      <h1 className="title">IronContacts</h1>
+      <div className="menu">
+        <button onClick={addContact}>Add Random Contact</button>
+        <button onClick={sortByName}>Sort by name</button>
+        <button onClick={sortByPopularity}>Sort by popularity</button>
+      </div>
       <table>
         <thead>
           <tr>
@@ -54,6 +64,7 @@ function App() {
             <th>Popularity</th>
             <th>Won Oscar</th>
             <th>Won Emmy</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -68,9 +79,19 @@ function App() {
                   />
                 </td>
                 <td>{contact.name}</td>
-                <td>{contact.popularity}</td>
+                <td>{contact.popularity.toFixed(2)}</td>
                 <td>{contact.wonOscar ? <span>🏆</span> : <span></span>}</td>
-                <td>{contact.wonEmmy ? <span>🏆</span> : <span></span>}</td>
+                <td>{contact.wonEmmy ? <span>🌟</span> : <span></span>}</td>
+                <td>
+                  <button
+                    className="delete-btn"
+                    onClick={() => {
+                      deleteContact(contact.id);
+                    }}
+                  >
+                    Delete
+                  </button>
+                </td>
               </tr>
             );
           })}
